@@ -19,7 +19,7 @@ The goal of the game is to move the rings into the same configuration, except on
 
 This game is traditionally done with three rings, but as you might guess from the diagram, the problem generalizes to n rings.
 
-The problem is optimally sovled with 2^n -1
+The problem is optimally sovled with (2^n)-1
 
 ## How to run
 
