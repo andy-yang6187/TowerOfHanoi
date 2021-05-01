@@ -1,9 +1,10 @@
-
+import time
 
 class TowerOfHanoi: 
     """Tower of Hanoi class encapsulating all related functions """
 
     Array2D = []
+    total_moves = 0
 
     def __init__(self, numer_of_rings = 3):
         """ Creates the starting game array, with the numer of rings as the input 
@@ -55,6 +56,8 @@ class TowerOfHanoi:
             print("")
 
         print("=  =  =")
+        print("_______________________________________________________________")
+        print("")
 
 
 
@@ -69,20 +72,29 @@ class TowerOfHanoi:
         other_peg    = The left over peg (since there are a total of 3 pegs)
 
         How the solver works: 
-        The goal of the solver is to move the base of the ring stack to the target location.
-        It does this by moving everything but the base ring to the other location. 
-        Then the base ring is moved to the target location. 
-        However unless the base case of just 2 rings are left, the function must be recursively called
-        until there are just 2 rings left, with the new target switching to the "other_peg"
+        The function must be able to move the top (rings_left - 1) rings to the other location, 
+        such that the base ring can be moved to the target location. 
+        It needs to be do this by recursively calling the function until only 2 rings are left, 
+        where the base case is excuted. 
         """
+        #sets up so the function can be called with no parameters
         if rings_left is None:
             rings_left = len(self.Array2D[0])
             self.print_state()
-
+        #the Base case
         if rings_left == 2: 
             self.move(starting_peg, other_peg)
             self.move(starting_peg, target_peg)
             self.move(other_peg, target_peg)
+            return
+        else: 
+            #the recursion portion
+            rings_left = rings_left - 1 
+            self.recursive_solver(rings_left, starting_peg, other_peg, target_peg)
+            self.move(starting_peg, target_peg)
+            self.recursive_solver(rings_left, other_peg, target_peg, starting_peg)
+
+
 
         
 
@@ -100,8 +112,8 @@ class TowerOfHanoi:
         target_row_index = target_peg - 1
 
         #Get the col index of the starting and target ring locations
-        start_col_index    = self.__next_available_index(start_row_index)
-        target_col_index   = self.__next_available_index(target_row_index)
+        start_col_index    = self.__next_available_index_start(start_row_index)
+        target_col_index   = self.__next_available_index_target(target_row_index)
 
         #Get the ring number from the identified top-most ring location from the starting peg
         item = self.Array2D[start_row_index][start_col_index]
@@ -114,11 +126,15 @@ class TowerOfHanoi:
 
         self.print_state()
 
+        self.total_moves = self.total_moves + 1
+        time.sleep(0.1)
+
 
     
-    def __next_available_index(self, row_number): 
+    def __next_available_index_start(self, row_number): 
         """Returns the next column index in the row = row_number of the 2D array 
-        where a ring exists or where it can be placed
+        where a ring currently exists. The ring can only be taken from a location where 
+        there is a non-zero number. 
 
         Key parameters: 
         row_number = The row where we are investigating
@@ -130,13 +146,50 @@ class TowerOfHanoi:
         #if the row is not empty and also not completely full, return the top-most ring
         for i in range(len(self.Array2D[row_number])):
             if self.Array2D[row_number][i] == 0:
-                return i-1
+                #Since the ring can only be taken from a non-zero location, 
+                # we return the index before the index of the first zero
+                return i-1 
         
         #if the row is completely full, return the top-most ring 
         return len(self.Array2D[row_number]) - 1 
+    
+    def __next_available_index_target(self, row_number): 
+        """Returns the next column index in the row = row_number of the 2D array 
+        where a ring can be placed. The ring can only be placed in a location where 
+        there is a zero. 
+
+        Key parameters: 
+        row_number = The row where we are investigating
+        """
+        #if the row is empty, return the bottom-most ring location
+        if self.Array2D[row_number][0] == 0: 
+            return 0
+
+        #if the row is not empty and also not completely full, return the top-most ring
+        for i in range(len(self.Array2D[row_number])):
+            if self.Array2D[row_number][i] == 0:
+                #since the ring can only be placed in the location of a zero, 
+                # we return the index of the first zero.
+                return i
+        
+        #if the row is completely full, return the top-most ring 
+        return len(self.Array2D[row_number]) - 1 
+
+    def is_optimal(self):
+        n = len(self.Array2D[0])
+        if self.total_moves == 2**n - 1:
+            return True
+        else:
+            return False
+    
         
 
 if __name__ == "__main__": 
 
-    game = TowerOfHanoi(2)
+    number_of_rings = input("How many rings would you like to solve the game for?")
+    game = TowerOfHanoi(int(number_of_rings))
     game.recursive_solver()
+    if game.is_optimal():
+        print("The game was solved optimally")
+    else: 
+        print("The game was not solved optimally")
