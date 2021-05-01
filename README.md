@@ -21,3 +21,7 @@ This game is traditionally done with three rings, but as you might guess from th
 
 The problem is optimally sovled with 2^^n -1
 
+## How to run
+
+Simply execute the tower_of_hanoi.py file 
+
