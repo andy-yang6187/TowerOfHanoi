@@ -5,7 +5,7 @@ This program serves as a test for the recursive algorithm to solve Tower of Hano
 
 Users can insert any number of rings, and the algorithm will solve the game. 
 
-![tower of hanoi example](andy-yang6187/TowerOfHanoi/blob/main/images/towerofhanoi.PNG?)
+![tower of hanoi example](https://github.com/andy-yang6187/TowerOfHanoi/blob/main/images/towerofhanoi.PNG)
 
 The goal of the game is to move the rings into the same configuration, except on peg C by moving the rings one by one according to the following rules:
 
