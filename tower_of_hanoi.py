@@ -19,7 +19,6 @@ class TowerOfHanoi:
 
         
 
-
     def print_state( self ): 
         """ Prints the Tower of Hanoi progress.
 
@@ -96,8 +95,6 @@ class TowerOfHanoi:
 
 
 
-        
-
     def move(self, starting_peg, target_peg):
         """Manipulates the 2D array to move the top most ring around.
         The ring is represented by cells within the 2D array
@@ -127,7 +124,7 @@ class TowerOfHanoi:
         self.print_state()
 
         self.total_moves = self.total_moves + 1
-        time.sleep(0.1)
+        #time.sleep(0.1)
 
 
     
@@ -152,7 +149,9 @@ class TowerOfHanoi:
         
         #if the row is completely full, return the top-most ring 
         return len(self.Array2D[row_number]) - 1 
-    
+
+
+
     def __next_available_index_target(self, row_number): 
         """Returns the next column index in the row = row_number of the 2D array 
         where a ring can be placed. The ring can only be placed in a location where 
@@ -175,9 +174,15 @@ class TowerOfHanoi:
         #if the row is completely full, return the top-most ring 
         return len(self.Array2D[row_number]) - 1 
 
+
+
     def is_optimal(self):
         n = len(self.Array2D[0])
-        if self.total_moves == 2**n - 1:
+        optimal_number_of_moves = 2**n -1
+        print(f"The game can optimally be solved with {optimal_number_of_moves} number of moves.")
+        print(f"The game took {self.total_moves} number of moves.")
+       
+        if self.total_moves == optimal_number_of_moves:
             return True
         else:
             return False
@@ -189,6 +194,8 @@ if __name__ == "__main__":
     number_of_rings = input("How many rings would you like to solve the game for?")
     game = TowerOfHanoi(int(number_of_rings))
     game.recursive_solver()
+
+
     if game.is_optimal():
         print("The game was solved optimally")
     else: 
